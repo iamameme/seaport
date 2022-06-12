@@ -72,7 +72,7 @@ contract DigestHelper {
     }
 
     /**
-     * @dev Internal pure function to efficiently derive an digest to sign for
+     * @dev Internal view function to efficiently derive an digest to sign for
      *      an order in accordance with EIP-712.
      *
      * @param orderHash       The order hash.

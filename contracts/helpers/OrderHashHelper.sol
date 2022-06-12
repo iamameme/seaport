@@ -27,7 +27,7 @@ contract OrderHashHelper {
     bytes32 constant ORDER_TYPEHASH = 0xfa445660b7e21515a59617fcd68910b487aa5808b8abda3d78bc85df364b2c2f;
 
     /**
-     * @dev Internal view function to derive the order hash for a given order.
+     * @dev Internal pure function to derive the order hash for a given order.
      *      Note that only the original consideration items are included in the
      *      order hash, as additional consideration items may be supplied by the
      *      caller.
