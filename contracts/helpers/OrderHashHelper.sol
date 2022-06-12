@@ -8,7 +8,7 @@ import { ConsiderationBase } from "../lib/ConsiderationBase.sol";
 /**
  * @title OrderHashHelper
  * @author iamameme
- * @notice OrderHashHelper contains an external pure view function
+ * @notice OrderHashHelper contains an internal pure view function
  *         to derive an order hash from given order parameters.
  */
 contract OrderHashHelper {
@@ -27,7 +27,7 @@ contract OrderHashHelper {
     bytes32 constant ORDER_TYPEHASH = 0xfa445660b7e21515a59617fcd68910b487aa5808b8abda3d78bc85df364b2c2f;
 
     /**
-     * @dev External view function to derive the order hash for a given order.
+     * @dev Internal view function to derive the order hash for a given order.
      *      Note that only the original consideration items are included in the
      *      order hash, as additional consideration items may be supplied by the
      *      caller.
@@ -40,7 +40,7 @@ contract OrderHashHelper {
     function deriveOrderHash(
         OrderParameters memory orderParameters,
         uint256 counter
-    ) external pure returns (bytes32 orderHash) {
+    ) internal pure returns (bytes32 orderHash) {
         // Get length of original consideration array and place it on the stack.
         uint256 originalConsiderationLength = (
             orderParameters.totalOriginalConsiderationItems

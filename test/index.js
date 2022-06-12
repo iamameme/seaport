@@ -10147,34 +10147,6 @@ describe(`Consideration (version: ${VERSION}) — initial test suite`, function 
     });
   });
 
-  describe("DomainHelper", async () => {
-    let seller;
-    let tempDomainHelper;
-
-    beforeEach(async () => {
-      // Setup basic wallet
-      seller = new ethers.Wallet(randomHex(32), provider);
-
-      // Deploy a new DomainHelper
-      const domainHelperFactory = await ethers.getContractFactory(
-        "DomainHelper"
-      );
-      tempDomainHelper = await domainHelperFactory.deploy(
-        marketplaceContract.address
-      );
-    });
-
-    it("Check Domain Helper gets the correct domain from marketplace", async () => {
-      const { domainSeparator } = await marketplaceContract.information();
-
-      const domainHelped = await tempDomainHelper
-        .connect(seller)
-        .domainSeparator();
-
-      expect(domainSeparator).to.equal(domainHelped);
-    });
-  });
-
   describe("DigestHelper", async () => {
     let tempDigestHelper;
     let buyer;
@@ -10199,12 +10171,14 @@ describe(`Consideration (version: ${VERSION}) — initial test suite`, function 
 
       // Deploy a new DomainHelper
       const digestHelperFactory = await ethers.getContractFactory(
-        "DigestHelper"
+        "TestOrderHashDigestHelper"
       );
-      tempDigestHelper = await digestHelperFactory.deploy();
+      tempDigestHelper = await digestHelperFactory.deploy(
+        marketplaceContract.address
+      );
     });
 
-    it("Check Digest Helper gets the correct digest with given order hash and domain separator", async () => {
+    it("Check Digest Helper gets the correct digest with given order hash", async () => {
       const { domainSeparator } = await marketplaceContract.information();
 
       const nftId = await mintAndApprove721(
@@ -10234,7 +10208,7 @@ describe(`Consideration (version: ${VERSION}) — initial test suite`, function 
 
       const digestHelped = await tempDigestHelper
         .connect(seller)
-        .deriveEIP712Digest(domainSeparator, orderHash);
+        .testDeriveEIP712Digest(orderHash);
 
       expect(digest).to.equal(digestHelped);
     });
@@ -10264,9 +10238,11 @@ describe(`Consideration (version: ${VERSION}) — initial test suite`, function 
 
       // Deploy a new OrderHashHelper
       const orderHashHelperFactory = await ethers.getContractFactory(
-        "OrderHashHelper"
+        "TestOrderHashDigestHelper"
       );
-      tempOrderHashHelper = await orderHashHelperFactory.deploy();
+      tempOrderHashHelper = await orderHashHelperFactory.deploy(
+        marketplaceContract.address
+      );
     });
 
     it("Check order hash matches create order: ERC721 <=> ETH (basic)", async () => {
@@ -10293,7 +10269,7 @@ describe(`Consideration (version: ${VERSION}) — initial test suite`, function 
 
       const orderHashHelped = await tempOrderHashHelper
         .connect(seller)
-        .deriveOrderHash(orderComponents, orderComponents.counter);
+        .testDeriveOrderHash(orderComponents, orderComponents.counter);
 
       expect(orderHash).to.equal(orderHashHelped);
     });
